@@ -36,6 +36,7 @@ final _borderDark = OutlineInputBorder(
 );
 
 final lightTheme = ThemeData(
+  brightness: Brightness.light,
   scaffoldBackgroundColor: AppColors.white,
   backgroundColor: AppColors.white,
   canvasColor: AppColors.white,
@@ -43,6 +44,7 @@ final lightTheme = ThemeData(
   secondaryHeaderColor: AppColors.lightGrey,
   selectedRowColor: AppColors.veryLightGrey,
   appBarTheme: AppBarTheme(
+    brightness: Brightness.light,
     color: AppColors.white,
     elevation: 2,
     textTheme: GoogleFonts.poppinsTextTheme().apply(
@@ -73,6 +75,7 @@ final lightTheme = ThemeData(
 );
 
 final darkTheme = ThemeData(
+  brightness: Brightness.dark,
   scaffoldBackgroundColor: AppColors.dark,
   secondaryHeaderColor: AppColors.white,
   backgroundColor: AppColors.grey,
@@ -80,6 +83,7 @@ final darkTheme = ThemeData(
   accentColor: AppColors.green,
   selectedRowColor: Colors.transparent,
   appBarTheme: AppBarTheme(
+    brightness: Brightness.dark,
     color: AppColors.purple, 
     elevation: 2
   ),

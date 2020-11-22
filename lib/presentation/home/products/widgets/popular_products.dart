@@ -1,28 +1,53 @@
-import 'package:clean_architecture_getx/presentation/product_detail/product_detail.dart';
+import 'package:clean_architecture_getx/global/routes/routes.dart';
+import 'package:clean_architecture_getx/presentation/home/cart/cart_controller.dart';
+import 'package:clean_architecture_getx/presentation/home/product_detail/product_detail.dart';
+import 'package:clean_architecture_getx/presentation/home/products/products_controller.dart';
 import 'package:flutter/material.dart';
 
 import 'package:clean_architecture_getx/domain/entities/product_entity.dart';
+import 'package:get/get.dart';
 
 
 class BuildPopularProducts extends StatelessWidget {
 
-  final List<ProductEntity> productList;
-
-  BuildPopularProducts({Key key, this.productList}) : super(key: key);
+  final controller = Get.find<ProductsController>();
+  final cartController = Get.find<CartController>();
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    return ListView.separated(
-      scrollDirection: Axis.horizontal,
-      itemCount: productList.length,
-      itemBuilder: (context, i) => _popularProduct(productList[i], context, size),
-      separatorBuilder: (context, index) => SizedBox(width: 10.0,),
+    return Obx(
+        () => controller.popularProducts.isNotEmpty 
+          ? ListView.separated(
+            scrollDirection: Axis.horizontal,
+            itemCount: controller.popularProducts.length,
+            itemBuilder: (context, i) => PopularProduct(
+              product: controller.popularProducts[i],
+              context: context,
+              size: size, 
+              ontap: () => cartController.add(controller.popularProducts[i])
+            ),
+            separatorBuilder: (context, index) => SizedBox(width: 10.0,),
+          )
+          : Center(child: CircularProgressIndicator(),)
     );
   }
   
-  Widget _popularProduct(ProductEntity product, BuildContext context, Size size) {
-    return 
+ 
+
+}
+
+class PopularProduct extends StatelessWidget {
+  //final controller = Get.find<ProductsController>();
+  final ProductEntity product;
+  final BuildContext context;
+  final Size size; 
+  final VoidCallback ontap; 
+   PopularProduct({Key key, this.product, this.context, this.size, this.ontap}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+     return 
         Stack(
           alignment: Alignment.bottomRight,
           children: [
@@ -92,13 +117,10 @@ class BuildPopularProducts extends StatelessWidget {
                   Icons.keyboard_arrow_right,
                   color: Theme.of(context).textTheme.caption.color
                 ),
-                onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_)=> ProductDetailPage(product: product,))),
+                onTap: ontap //=> Navigator.of(context).push(MaterialPageRoute(builder: (_)=> ProductDetailPage(product: product,))),
               )
             )
           ],
         );
-        //Icon(Icons.favorite_border_outlined, color: Theme.of(context).secondaryHeaderColor )
-      
   }
-
 }

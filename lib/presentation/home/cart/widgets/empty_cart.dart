@@ -1,12 +1,18 @@
 import 'package:clean_architecture_getx/global/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:clean_architecture_getx/presentation/home/cart/cart_controller.dart';
+import 'package:get/get.dart';
 
-class EmptyCart extends StatelessWidget {
+
+class EmptyCart extends GetWidget<CartController> {
+
+  final VoidCallback onShopping;
+
+  EmptyCart({Key key, this.onShopping}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    return  Column(
+    return Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -25,11 +31,10 @@ class EmptyCart extends StatelessWidget {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10)
               ),
-              onPressed: (){},
+              onPressed: onShopping,
               child: Text(
                 'Go home'
-              ),
-              
+              ),             
             ),
           )
         ],

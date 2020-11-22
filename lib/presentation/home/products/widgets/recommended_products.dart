@@ -1,23 +1,26 @@
-import 'package:clean_architecture_getx/global/theme/theme.dart';
+import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 
+import 'package:clean_architecture_getx/presentation/home/products/products_controller.dart';
 import 'package:clean_architecture_getx/domain/entities/product_entity.dart';
 
 
 class BuildRecommendedProducts extends StatelessWidget {
 
-  final List<ProductEntity> productList;
-
-  BuildRecommendedProducts({Key key, this.productList}) : super(key: key);
+  final controller = Get.find<ProductsController>();
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    return ListView.separated(
-      scrollDirection: Axis.horizontal,
-      itemCount: productList.length,
-      itemBuilder: (context, i) => _recommendedProduct(productList[i], context, size),
-      separatorBuilder: (context, index) => SizedBox(width: 10.0,),
+    return Obx(
+        () => controller.recommendedProducts.isNotEmpty 
+          ? ListView.separated(
+            scrollDirection: Axis.horizontal,
+            itemCount: controller.recommendedProducts.length,
+            itemBuilder: (context, i) => _recommendedProduct(controller.recommendedProducts[i], context, size),
+            separatorBuilder: (context, index) => SizedBox(width: 10.0,),
+          )
+          : Center(child: CircularProgressIndicator(),)
     );
   }
   

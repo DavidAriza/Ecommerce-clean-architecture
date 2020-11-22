@@ -60,9 +60,9 @@ class ApiDataSourceImpl implements ApiDataSource{
     }
   
     @override
-    Future<void> logout(String token) {
-    // TODO: implement logout
-    throw UnimplementedError();
+    Future<void> logout(String token) async {
+    print('removing token from server');
+    return;
   }
 
 

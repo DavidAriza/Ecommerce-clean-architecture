@@ -1,37 +1,60 @@
 
 
+import 'package:clean_architecture_getx/domain/entities/product_entity.dart';
 import 'package:clean_architecture_getx/domain/entities/user_entity.dart';
 import 'package:clean_architecture_getx/domain/repositories/local_storage_repository.dart';
 
 class UserUseCases {
 
-  final LocalStorageRepository _localStorageRepository;
+  final LocalStorageRepository localStorageRepository;
 
-  UserUseCases(this._localStorageRepository);
+  UserUseCases({this.localStorageRepository});
 
   
   Future<void> clearAllData() async {
-    return await _localStorageRepository.clearAllData(); 
+    return await localStorageRepository.clearAllData(); 
   }
 
 
   Future<String> getToken() async {
-    return await _localStorageRepository.getToken(); 
+    return await localStorageRepository.getToken(); 
   }
 
 
   Future<String> saveToken(String token) async {
-    return await _localStorageRepository.saveToken(token); 
+    return await localStorageRepository.saveToken(token); 
   } 
 
 
   Future<UserEntity> getUser() async {
-   return await _localStorageRepository.getUser(); 
+   return await localStorageRepository.getUser(); 
   }
 
 
   Future<UserEntity> saveUser(UserEntity user) async {
-    return await _localStorageRepository.saveUser(user); 
+    return await localStorageRepository.saveUser(user); 
   } 
+
+  Future<bool> isDarkTheme( ) async {
+    return await localStorageRepository.isDarkTheme(); 
+  } 
+
+  Future<void> saveDarkTheme(bool darkTheme ) async {
+    return await localStorageRepository.saveDarkTheme(darkTheme); 
+  } 
+
+  Future<List<ProductEntity>> getCategories() async {
+    return await localStorageRepository.getCategories();
+  }
+
+  Future<List<ProductEntity>> getPopularProducts() async {
+    return await localStorageRepository.getPopularProducts();
+  }
+
+  Future<List<ProductEntity>> getRecommended() async {
+    return await localStorageRepository.getRecommended();
+  }
+
+
 
 }

@@ -1,18 +1,18 @@
-import 'package:clean_architecture_getx/presentation/cart/cart_page.dart';
-import 'package:clean_architecture_getx/presentation/home/widgets/custom_navigation_bar.dart';
-import 'package:clean_architecture_getx/presentation/products/product_page.dart';
-import 'package:clean_architecture_getx/presentation/profile/profile_page.dart';
+import 'package:clean_architecture_getx/presentation/home/cart/cart_controller.dart';
+import 'package:clean_architecture_getx/presentation/home/home_controller.dart';
 import 'package:flutter/material.dart';
 
-class HomePage extends StatefulWidget {
-  HomePage({Key key}) : super(key: key);
+import 'package:clean_architecture_getx/presentation/home/cart/cart_page.dart';
+import 'package:clean_architecture_getx/presentation/home/products/product_page.dart';
+import 'package:clean_architecture_getx/presentation/home/profile/profile_page.dart';
+import 'package:clean_architecture_getx/presentation/home/widgets/custom_navigation_bar.dart';
+import 'package:get/get.dart';
 
-  @override
-  _HomePageState createState() => _HomePageState();
-}
 
-class _HomePageState extends State<HomePage> {
-  int currentIndex = 0;
+class HomePage extends GetWidget<HomeController> {
+
+  final cartController = Get.find<CartController>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,28 +20,39 @@ class _HomePageState extends State<HomePage> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Expanded(
-            child: IndexedStack(
-              index: currentIndex,
-              children: [
-                ProductPage(),
-                Text(currentIndex.toString()),
-                CartPage(),
-                Text(currentIndex.toString()),
-                ProfilePage(),
-                
-              ],
+            child: Obx(
+              () {
+                return controller.indexSelected.value != null ? IndexedStack(
+                index: controller.indexSelected.value,
+                children: [
+                  ProductPage(),
+                  Placeholder(),
+                  CartPage(
+                    onShopping: (){
+                      controller.indexSelected.value=0;
+                    },
+                  ),
+                  Placeholder(),
+                  ProfilePage(),
+                ],
+              ) : SizedBox.shrink();}               
             ),
           ),
-          CustomNavigationBar(
-            index: currentIndex,
-            onIndexSelected: (index) {
-              setState(() {
-                currentIndex = index;
-              });
-            },
+          Obx(
+            () => CustomNavigationBar(
+              //totalCartItems: cartController.totalItems.value,
+              index: controller.indexSelected.value,
+              onIndexSelected: (index) {
+                controller.updateIndex(index);
+                // setState(() {
+                //   currentIndex = index;
+                // });
+              },
+            ),
           )
         ],
       ),
     );
   }
 }
+

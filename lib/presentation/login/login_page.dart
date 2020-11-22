@@ -1,10 +1,21 @@
+import 'package:clean_architecture_getx/global/routes/routes.dart';
 import 'package:clean_architecture_getx/global/theme/theme.dart';
+import 'package:clean_architecture_getx/presentation/login/login_controller.dart';
 import 'package:clean_architecture_getx/presentation/login/widgets/gradient_button.dart';
-import 'package:clean_architecture_getx/presentation/products/product_page.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
-class LoginPage extends StatelessWidget {
-  const LoginPage({Key key}) : super(key: key);
+class LoginPage extends GetWidget<LoginController> {
+
+
+  void login() async {
+    final result = await controller.login();
+    if(result){
+      Get.offAllNamed(AppRoutes.home);
+    } else {
+      Get.snackbar('Error', 'Invalid username or password');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,47 +31,64 @@ class LoginPage extends StatelessWidget {
 
   Widget _buildBody(BuildContext context, Size size) {
     final double h = 10.0;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+    return Stack(
+      alignment: Alignment.center,
       children: [
-        _halfCircleAndLogo(size, context),
-        SizedBox(height: h,),
-        Center(
-          child: Text(
-            'Login',
-            style: Theme.of(context).textTheme.headline4.copyWith(fontWeight: FontWeight.bold),
-          ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _halfCircleAndLogo(size, context),
+            SizedBox(height: h,),
+            Center(
+              child: Text(
+                'Login',
+                style: Theme.of(context).textTheme.headline4.copyWith(fontWeight: FontWeight.bold),
+              ),
+            ),
+            SizedBox(height: h*2,),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10.0),
+              child: Text(
+                'Username',
+                style: Theme.of(context).textTheme.caption.copyWith(fontWeight: FontWeight.bold, color: Theme.of(context).inputDecorationTheme.labelStyle.color),
+                textAlign: TextAlign.left,
+              ),
+            ),
+            _buildTextField(controller.usernameTextController, false, context, 'username', Icons.person_outline),
+            SizedBox(height: h+5,),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10.0),
+              child: Text(
+                'Password',
+                style: Theme.of(context).textTheme.caption.copyWith(fontWeight: FontWeight.bold, color: Theme.of(context).inputDecorationTheme.labelStyle.color),
+                textAlign: TextAlign.left,
+              ),
+            ),
+            _buildTextField(controller.passwordTextController, true, context, '* * * * * *', Icons.lock),
+            SizedBox(height: size.height*0.2,),
+            Center(
+              child: GradientButton(
+                context: context,
+                width: size.width*0.6,
+                onTap: login , 
+                text: 'Login',
+              ),
+            ),
+          ],
         ),
-        SizedBox(height: h*2,),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10.0),
-          child: Text(
-            'Username',
-            style: Theme.of(context).textTheme.caption.copyWith(fontWeight: FontWeight.bold, color: Theme.of(context).inputDecorationTheme.labelStyle.color),
-            textAlign: TextAlign.left,
-          ),
-        ),
-        _buildTextField(context, 'username', Icons.person_outline),
-        SizedBox(height: h+5,),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10.0),
-          child: Text(
-            'Password',
-            style: Theme.of(context).textTheme.caption.copyWith(fontWeight: FontWeight.bold, color: Theme.of(context).inputDecorationTheme.labelStyle.color),
-            textAlign: TextAlign.left,
-          ),
-        ),
-        _buildTextField(context, '* * * * * *', Icons.lock),
-        SizedBox(height: size.height*0.2,),
-        Center(
-          child: GradientButton(
-            context: context,
-            width: size.width*0.6,
-            onTap: () => Navigator.of(context).push(MaterialPageRoute(
-              builder: (_)=>ProductPage())) , 
-            text: 'Login',
-          ),
-        ),
+        Obx((){
+          if(controller.loginState.value == LoginState.loading){
+            return Container(
+              color: Colors.black26,
+              child: Center(
+                child: CircularProgressIndicator(),
+              ),
+            );
+          } else {
+            return SizedBox.shrink();
+          } 
+        }
+        )
       ],
     );
   }
@@ -91,10 +119,12 @@ class LoginPage extends StatelessWidget {
     );
   }
 
-  Widget _buildTextField(BuildContext context, String text, IconData icon){
+  Widget _buildTextField(TextEditingController textController, bool value,  BuildContext context, String text, IconData icon){
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10.0),
       child: TextField(
+        controller: textController,
+        obscureText: value,
         decoration: InputDecoration(
           prefixIcon: Icon(icon, color: Theme.of(context).iconTheme.color,),
           hintText: text

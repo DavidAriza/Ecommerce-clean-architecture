@@ -14,6 +14,13 @@ class UserEntity extends Equatable {
         this.image,
     });
 
+  factory UserEntity.empty() => UserEntity(
+    name: null,
+    username : null,
+    image: null, 
+    //email: null
+  );
+
   @override
   List<Object> get props => [name, username, email, image];
 }

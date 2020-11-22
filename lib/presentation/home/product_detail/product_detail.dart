@@ -1,6 +1,6 @@
 import 'package:clean_architecture_getx/domain/entities/product_entity.dart';
 import 'package:clean_architecture_getx/global/theme/theme.dart';
-import 'package:clean_architecture_getx/presentation/product_detail/widgets/product_detail_bottom_bar.dart';
+import 'package:clean_architecture_getx/presentation/home/product_detail/widgets/product_detail_bottom_bar.dart';
 import 'package:flutter/material.dart';
 
 class ProductDetailPage extends StatelessWidget {

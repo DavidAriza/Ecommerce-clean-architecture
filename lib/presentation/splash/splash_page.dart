@@ -1,14 +1,10 @@
 import 'package:clean_architecture_getx/global/theme/theme.dart';
+import 'package:clean_architecture_getx/presentation/splash/splash_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
-class SplashPage extends StatefulWidget {
-  const SplashPage({Key key}) : super(key: key);
-
-  @override
-  _SplashPageState createState() => _SplashPageState();
-}
-
-class _SplashPageState extends State<SplashPage> {
+class SplashPage extends GetWidget<SplashController> {
+  final splashController = Get.find<SplashController>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,7 +17,7 @@ class _SplashPageState extends State<SplashPage> {
               radius: 50,
               backgroundColor: AppColors.white,
               child: Icon(
-                Icons.food_bank,
+                Icons.person,
                 size: 80,
               )
             ),

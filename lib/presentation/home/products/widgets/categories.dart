@@ -1,24 +1,30 @@
+import 'package:clean_architecture_getx/presentation/home/products/products_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'dart:math' as math;
 
 import 'package:clean_architecture_getx/domain/entities/product_entity.dart';
+import 'package:get/get.dart';
 
 
 class BuildCategories extends StatelessWidget {
 
-  final List<ProductEntity> productList;
-
-  BuildCategories({Key key, this.productList}) : super(key: key);
+  // final List<ProductEntity> productList;
+  final controller = Get.find<ProductsController>();
+  // BuildCategories({Key key, this.productList}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    return ListView.separated(
-      scrollDirection: Axis.horizontal,
-      itemCount: productList.length,
-      itemBuilder: (context, i) => _categoryItem(productList[i], context, size),
-      separatorBuilder: (context, index) => SizedBox(width: 20.0,),
+    return Obx(
+        () => controller.categories.isNotEmpty 
+          ? ListView.separated(
+            scrollDirection: Axis.horizontal,
+            itemCount: controller.categories.length,
+            itemBuilder: (context, i) => _categoryItem(controller.categories[i], context, size),
+            separatorBuilder: (context, index) => SizedBox(width: 20.0,),
+          )
+          : Center(child: CircularProgressIndicator(),),
     );
   }
   
